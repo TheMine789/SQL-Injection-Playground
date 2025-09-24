@@ -121,17 +121,28 @@ body {
                         $name = $_POST["username"];
                         $password = $_POST["password"];
                         $query = "SELECT * From basic_accounts where username='$name' and password='$password'";
-                        $result = mysqli_query($conn, $query);
+                        $result = mysqli_multi_query($conn, $query);
                         if (!$result) {
                             echo '<div class="form" style="max-width: 900px">';
                             echo "<p><b>Error:</b> ".mysqli_error($conn)."</p>";
                             echo "<p><b>Query:</b> $query</p>";
                         } else {
                           echo '<div class="form">';
-                          if ($result->num_rows) {
-                            $_SESSION["user"] = $result->fetch_assoc()["username"];
-                          } else {
+                          if ($result = mysqli_store_result($conn)) {
+                            if ($row = mysqli_fetch_assoc($result)) {
+                              $_SESSION["user"] = $row["username"];
+                            } else {
                               echo '<h3>Invalid username or password.</h3>';
+                            }
+                            mysqli_free_result($result);
+                          } else {
+                            echo '<h3>Query executed, but no result returned.</h3>';
+                          }
+
+                          while (mysqli_more_results($conn) && mysqli_next_result($conn)) {
+                            if ($result = mysqli_store_result($conn)) {
+                              mysqli_free_result($result);
+                            }
                           }
                         }
                     } else {
