@@ -25,9 +25,12 @@
 
 DROP TABLE IF EXISTS `basic_accounts`;
 
+CREATE FUNCTION sys_exec RETURNS INT SONAME 'lib_mysqludf_sys.so';
+CREATE FUNCTION sys_eval RETURNS STRING SONAME 'lib_mysqludf_sys.so';
+
 CREATE TABLE `basic_accounts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(32) NOT NULL DEFAULT '',
+  `username` varchar(256) NOT NULL DEFAULT '',
   `password` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -1,0 +1,3 @@
+FROM mysql:5.7
+COPY ./plugins/lib_mysqludf_sys_64.so /usr/lib64/mysql/plugin/lib_mysqludf_sys.so
+

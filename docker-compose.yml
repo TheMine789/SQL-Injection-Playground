@@ -1,7 +1,9 @@
 version: "2"
 services:
     www:
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile
         ports: 
             - "8001:80"
         volumes:
@@ -12,7 +14,9 @@ services:
         networks:
             - default
     db:
-        image: mysql:5.7
+        build:
+            context: .
+            dockerfile: Dockerfile.mysql
         ports: 
             - "3307:3306"
         environment:
@@ -22,7 +26,8 @@ services:
             MYSQL_ROOT_PASSWORD: RootPassword
         volumes:
             - ./dump:/docker-entrypoint-initdb.d
-            - persistent:/var/lib/mysql
+            # - persistent:/var/lib/mysql
+            - ./secret:/secret
         networks:
             - default
 volumes:
